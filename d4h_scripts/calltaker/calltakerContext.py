@@ -73,5 +73,6 @@ class CalltakerContext:
       for signup in signups:
         if signup.startDate().date() == day.date():
           list.append(signup)
-    return list    #.sort(key=signup.compare)
+    list.sort()
+    return list
 

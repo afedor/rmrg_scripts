@@ -74,18 +74,18 @@ def formatCallTakerHtml():
       dominate.util.raw(callCalendar.formatmonth(nextMonth.year, nextMonth.month))
   return doc
   
-  def emailMessage(doc):
-    emailList = calltakerEmailList()
-    msg = EmailMessage()
-    msg['Subject'] = "Calltaker Daily Summary"
-    msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
-    msg['To'] = (Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org"))
-    #msg['Bcc'] = ", ".join(emailList)
-    msg.set_content(" - plain content goes here - ")
-    msg.add_alternative(str(doc), subtype='html')
-    # Send the message via local SMTP server.
-    with smtplib.SMTP('localhost') as s:
-      s.send_message(msg)
+def emailMessage(doc):
+  emailList = calltakerEmailList()
+  msg = EmailMessage()
+  msg['Subject'] = "Calltaker Daily Summary"
+  msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
+  msg['To'] = (Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org"))
+  #msg['Bcc'] = ", ".join(emailList)
+  msg.set_content(" - plain content goes here - ")
+  msg.add_alternative(str(doc), subtype='html')
+  # Send the message via local SMTP server.
+  with smtplib.SMTP('localhost') as s:
+    s.send_message(msg)
 
 def callMain():
   parser = argparse.ArgumentParser(description='Calltaker Daily', formatter_class=argparse.ArgumentDefaultsHelpFormatter)

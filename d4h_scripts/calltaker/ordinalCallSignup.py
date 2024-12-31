@@ -30,6 +30,8 @@ class OrdinalCallSignup:
       endHour = 24
     return endHour
 
-  def compare(self):
-    return self.startDate()
+  def __eq__(self, other):
+      return self.startDate() == other.startDate()
 
+  def __lt__(self, other):
+      return self.startDate() < other.startDate()

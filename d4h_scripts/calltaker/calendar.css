@@ -1,0 +1,43 @@
+ul {
+    list-style: none;
+    padding-left: 0;
+    font-size: 12px;
+}
+.filled{
+    background-color: pink;
+}
+.today {
+    background-color: #66ccff;
+}
+.noday{
+    background-color: #f0f0f5;
+}
+.month {
+    border:1px solid navy;
+    width: 70%;
+    text-align: center;
+}
+.month th {
+    text-align: center;
+    width:100px;
+    height:20px;
+}
+.month td {
+    width: 100px;
+    height: 100px;
+    vertical-align: top;
+    text-align: right;
+    border: 1px solid #c6c6ec;
+}
+.daycomp {
+  background-color:#b1cdee;
+}
+.todcomp {
+  background-color:#b3e4a7;
+}
+.daypart {
+  background-color:#f6ed9f;
+}
+.todpart {
+  background-color:#ff3333;
+}

@@ -4,6 +4,7 @@
 # Downloads current calltaker calendar from D4H and mails out a summary to the calltakers
 # See: https://github.com/Knio/dominate
 #
+import sys
 import argparse
 import datetime
 import requests
@@ -19,6 +20,7 @@ from dutyModel import DutyModel
 from calltakerContext import CalltakerContext
 from calltakerCalendar import CalltakerCalendar
 from memberContext import MemberContext
+from config import *
 # Email
 import smtplib
 from email.message import EmailMessage
@@ -39,7 +41,7 @@ def formatCallTakerHtml():
   context.getCalltakerDuties()
   callCalendar = CalltakerCalendar(context, calendar.MONDAY)
   tomorrow = datetime.datetime.today() + datetime.timedelta(1)
-  fstyle = open("calendar.css", "r")
+  fstyle = open(sys.path[0] + "/calendar.css", "r")
   lstyle = fstyle.readlines()
   tomorrowSignups = context.getSignupsForDay(tomorrow)
 
@@ -73,12 +75,14 @@ def formatCallTakerHtml():
   return doc
   
 def emailMessage(doc):
+  global temp_email_list
   emailList = calltakerEmailList()
   msg = EmailMessage()
   msg['Subject'] = "Calltaker Daily Summary"
   msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
   msg['To'] = (Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org"))
   #msg['Bcc'] = ", ".join(emailList)
+  msg['Bcc'] = ", ".join(temp_email_list)
   msg.set_content(" - plain content goes here - ")
   msg.add_alternative(str(doc), subtype='html')
   # Send the message via local SMTP server.

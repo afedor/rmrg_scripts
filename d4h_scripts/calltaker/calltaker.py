@@ -41,6 +41,7 @@ def formatCallTakerHtml():
   tomorrow = datetime.datetime.today() + datetime.timedelta(1)
   fstyle = open("calendar.css", "r")
   lstyle = fstyle.readlines()
+  tomorrowSignups = context.getSignupsForDay(tomorrow)
 
   doc = dominate.document(title='Calltaker Daily')
   with doc.head:
@@ -50,15 +51,12 @@ def formatCallTakerHtml():
     p('Note this is a test of D4H scheduling for calltakers. This is not live yet.')
     h3('Calltakers for tomorrow:')
     with div().add(ul()):
-      for model in context.calltakers:
-        signups = context.callSignupsFromData(model)
-        for signup in signups:
-          if signup.startDate().date() == tomorrow.date():
-            startStr = str(signup.startDate().strftime('%H%M'))
-            endStr = str(signup.endDate().strftime('%H%M'))
-            if endStr == '0000':
-              endStr = '2400'
-            li(' '+ signup.dutyModel.memberName()+ ': '+ startStr+ ' -> '+ endStr)
+      for signup in tomorrowSignups:
+        startStr = str(signup.startDate().strftime('%H%M'))
+        endStr = str(signup.endDate().strftime('%H%M'))
+        if endStr == '0000':
+          endStr = '2400'
+        li(' '+ signup.dutyModel.memberName()+ ': '+ startStr+ ' -> '+ endStr)
 
     if context.isDayComplete(tomorrow) == False:
       p("Still need signup for tomorrow!")

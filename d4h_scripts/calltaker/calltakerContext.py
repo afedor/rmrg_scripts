@@ -14,7 +14,7 @@ class CalltakerContext:
   def __init__(self):
     self.calltakers = []
  
-  def callSignupsFromData(self, calltaker) -> list:
+  def callSignupsFromDutyModel(self, calltaker) -> list:
     """
     Separates a multi-day calltaker duty into individual days and returns a list of signups
     for each day
@@ -32,7 +32,7 @@ class CalltakerContext:
     """
     signUpHours = [0 for i in range(48)]
     for dutyModel in self.calltakers:
-      signups = self.callSignupsFromData(dutyModel)
+      signups = self.callSignupsFromDutyModel(dutyModel)
       for signup in signups:
         if currentDate.date() != signup.startDate().date():
           continue
@@ -69,7 +69,7 @@ class CalltakerContext:
     """
     list = []
     for model in self.calltakers:
-      signups = self.callSignupsFromData(model)
+      signups = self.callSignupsFromDutyModel(model)
       for signup in signups:
         if signup.startDate().date() == day.date():
           list.append(signup)

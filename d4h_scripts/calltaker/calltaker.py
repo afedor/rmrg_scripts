@@ -72,6 +72,20 @@ def formatCallTakerHtml():
       nextMonth = datetime.datetime.today() + datetime.timedelta(21)
       callCalendar.setCurrentMonthDate(nextMonth)
       dominate.util.raw(callCalendar.formatmonth(nextMonth.year, nextMonth.month))
+    with table().add(tbody()):
+      with tr():
+        td(cls='daypart', width='40px')
+        td('Not covered (Any day)')
+      with tr():
+        td(cls='daycomp', width='40px')
+        td('Covered (Any day)')
+      with tr():
+        td(cls='todpart', width='40px')
+        td('Not Covered for today')
+      with tr():
+        td(cls='todcomp', width='40px')
+        td('Covered for today')
+
   return doc
   
 def emailMessage(doc):

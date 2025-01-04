@@ -55,6 +55,20 @@ def formatCallStatus(doc):
           for i in range(0, 20):
             stat = value[i]
             td(cls=availClass[stat])
+    with table().add(tbody()):
+      with tr():
+        td(cls='savail', width='40px')
+        td('Available')
+      with tr():
+        td(cls='swork', width='40px')
+        td('Marginal (During work hours)')
+      with tr():
+        td(cls='smarg', width='40px')
+        td('Marginal (All day)')
+      with tr():
+        td(cls='sunav', width='40px')
+        td('Unavailable')
+    br()
 
 def formatCallTakerHtml():
   """

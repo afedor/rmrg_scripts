@@ -17,27 +17,50 @@ import apiHelper
 import commonDates
 from ordinalCallSignup import OrdinalCallSignup
 from dutyModel import DutyModel
+from dutyModel import AvailStatus
 from calltakerContext import CalltakerContext
 from calltakerCalendar import CalltakerCalendar
-from memberContext import MemberContext
 from config import *
 # Email
 import smtplib
 from email.message import EmailMessage
 from email.headerregistry import Address
 
-def calltakerEmailList() -> list:
-  memberContext = MemberContext()
-  memberContext.initContext()
-  gid = memberContext.groupIdentWithName("Calltaker")
-  memberList = memberContext.membersInGroup(gid)
-  return memberContext.memberGroupEmails(memberList)
+context=0
+
+def formatCallStatus(doc):
+  map = context.calltakerStatusMap()
+  todaydate = datetime.datetime.now(datetime.timezone.utc)
+  availClass = {AvailStatus.NoStatus: 'snone', AvailStatus.Available: 'savail', AvailStatus.Work: 'swork', AvailStatus.Marginal: 'smarg', AvailStatus.Unavailable: 'sunav'}
+  with doc:
+    h3('Calltakers Availability:')
+    with table(border=1).add(tbody()):
+      with tr():
+        td('        ')
+        td(todaydate.strftime('%B'), colspan="20")
+      with tr():
+        td('    ')
+        for i in range(0, 20):
+          thedate = todaydate + datetime.timedelta(days=i)
+          weekday = thedate.strftime('%a')
+          td(weekday[0])
+      with tr():
+        td('Name')
+        for i in range(0, 20):
+          thedate = todaydate + datetime.timedelta(days=i)
+          td(thedate.day)
+      for key, value in map.items():
+        with tr():
+          td(key)
+          for i in range(0, 20):
+            stat = value[i]
+            td(cls=availClass[stat])
 
 def formatCallTakerHtml():
   """
   Format calltaker info into html
   """
-  context = CalltakerContext()
+  global context
   context.getCalltakerDuties()
   callCalendar = CalltakerCalendar(context, calendar.MONDAY)
   tomorrow = datetime.datetime.today() + datetime.timedelta(1)
@@ -85,14 +108,16 @@ def formatCallTakerHtml():
       with tr():
         td(cls='todcomp', width='40px')
         td('Covered for today')
+    br()
 
   return doc
   
 def emailMessage(doc):
   global temp_email_list
-  emailList = calltakerEmailList()
+  global context
+  emailList = context.calltakerEmailList()
   msg = EmailMessage()
-  msg['Subject'] = "Calltaker Daily Summary"
+  msg['Subject'] = "D4H Calltaker Daily Summary"
   msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
   msg['To'] = (Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org"))
   #msg['Bcc'] = ", ".join(emailList)
@@ -104,12 +129,16 @@ def emailMessage(doc):
     s.send_message(msg)
 
 def callMain():
+  global context
   parser = argparse.ArgumentParser(description='Calltaker Daily', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument("-l", "--live", dest='live', action='store_true', help='Run live and send email')
   args = parser.parse_args()
 
   apiHelper.requestContext()
+  context = CalltakerContext() 
+  context.getDuties()
   doc = formatCallTakerHtml()
+  formatCallStatus(doc)
   if args.live:
     emailMessage(doc)
   else:

@@ -41,3 +41,24 @@ ul {
 .todpart {
   background-color:#ff3333;
 }
+
+.savail {
+  width: 20px;
+  background-color:#33ff33;
+}
+.swork {
+  width: 20px;
+  background-color:#ffff33;
+}
+.smarg {
+  width: 20px;
+  background-color:#ffa500;
+}
+.sunav {
+  width: 20px;
+  background-color:#ff3333;
+}
+.snone {
+  width: 20px;
+}
+

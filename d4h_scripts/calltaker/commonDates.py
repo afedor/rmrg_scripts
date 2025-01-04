@@ -6,7 +6,14 @@ def strToDatetime(string):
   """
   newdate = datetime.datetime.strptime(string, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=datetime.timezone.utc)
   return newdate.astimezone()
-  
+
+def differenceInDays(startDate, endDate) -> int:
+  """
+  Calculate the number of days between the dates, e.g. 3/19 12:30 to 3/20 11:00 is 1 day
+  """
+  delta = endDate.date() - startDate.date()
+  return delta.days
+
 def numberOfDays(startDate, endDate) -> int:
   """
   Calculate over how many days the time span is, e.g. 3/19 12:30 to 3/20 11:00 is 2 days

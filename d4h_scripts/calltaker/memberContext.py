@@ -60,8 +60,19 @@ class MemberContext:
     return list
 
   def memberGroupEmails(self, groupList) -> list:
+    """
+    Return the emails contained in the list
+    """
     list = []
     for member in groupList:
       list.append(member['email']['value'])
     return list
 
+  def memberGroupNames(self, groupList) -> list:
+    """
+    Return the names contained in the list
+    """
+    list = []
+    for member in groupList:
+      list.append(member['name'])
+    return list

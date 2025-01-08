@@ -134,15 +134,12 @@ def formatCallTakerHtml():
   return doc
   
 def emailMessage(doc):
-  global temp_email_list
   global context
   emailList = context.calltakerEmailList()
   msg = EmailMessage()
   msg['Subject'] = "D4H Calltaker Daily Summary"
   msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
-  msg['To'] = (Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org"))
-  #msg['Bcc'] = ", ".join(emailList)
-  msg['Bcc'] = ", ".join(temp_email_list)
+  msg['To'] = Address("Calltakers", "calltakernotify", "rockymountainrescue.org")
   msg.set_content(" - plain content goes here - ")
   msg.add_alternative(str(doc), subtype='html')
   # Send the message via local SMTP server.

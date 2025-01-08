@@ -29,30 +29,37 @@ from email.headerregistry import Address
 context=0
 
 def formatCallStatus(doc):
+  maxdays = 20
   map = context.calltakerStatusMap()
   todaydate = datetime.datetime.now(datetime.timezone.utc)
+  nextmonth = commonDates.firstDayOfNextMonth(todaydate)
+  colspan = commonDates.differenceInDays(todaydate, nextmonth)
+  if colspan > maxdays:
+    colspan = maxdays
   availClass = {AvailStatus.NoStatus: 'snone', AvailStatus.Available: 'savail', AvailStatus.Work: 'swork', AvailStatus.Marginal: 'smarg', AvailStatus.Unavailable: 'sunav'}
   with doc:
     h3('Calltakers Availability:')
     with table(border=1).add(tbody()):
       with tr():
         td('        ')
-        td(todaydate.strftime('%B'), colspan="20")
+        td(todaydate.strftime('%b'), colspan=str(colspan))
+        if colspan < maxdays:
+          td(nextmonth.strftime('%b'), colspan=str(maxdays-colspan))
       with tr():
         td('    ')
-        for i in range(0, 20):
+        for i in range(0, maxdays):
           thedate = todaydate + datetime.timedelta(days=i)
           weekday = thedate.strftime('%a')
           td(weekday[0])
       with tr():
         td('Name')
-        for i in range(0, 20):
+        for i in range(0, maxdays):
           thedate = todaydate + datetime.timedelta(days=i)
           td(thedate.day)
       for key, value in map.items():
         with tr():
           td(key)
-          for i in range(0, 20):
+          for i in range(0, maxdays):
             stat = value[i]
             td(cls=availClass[stat])
     with table().add(tbody()):

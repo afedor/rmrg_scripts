@@ -24,3 +24,15 @@ def numberOfDays(startDate, endDate) -> int:
 
 def withoutTime(theDate):
   return theDate.replace(hour=0, minute=0, second=0, microsecond=0)
+
+def firstDayOfNextMonth(theDate):
+  """
+  Returns the first day of the month following the given date
+  """
+  nextMonth = theDate.month+1
+  nextYear = theDate.year
+  if nextMonth > 12:
+    nextMonth = 1
+    nextYear += 1
+  return theDate.replace(year=nextYear, month=nextMonth, day=1)
+

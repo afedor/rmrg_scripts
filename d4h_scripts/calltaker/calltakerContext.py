@@ -104,7 +104,7 @@ class CalltakerContext:
     map = {}
     for name in names:
       map[name] = [AvailStatus.NoStatus for i in range(30)]
-    todaydate = datetime.datetime.now(datetime.timezone.utc)
+    todaydate = datetime.datetime.today()
     for model in self.duties:
       signups = self.callSignupsFromDutyModel(model)
       for signup in signups:

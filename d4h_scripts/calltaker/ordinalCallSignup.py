@@ -10,15 +10,14 @@ class OrdinalCallSignup:
 
   def startDate(self):
     if self.dayOffset > 0:
-      newDate = self.dutyModel.startDate() + datetime.timedelta(days=self.dayOffset)
-      newDate.replace(hour=0, minute=0, second=0, microsecond=0)
+      newDate = commonDates.withoutTime(self.dutyModel.startDate()) + datetime.timedelta(days=self.dayOffset)
       return newDate
     return self.dutyModel.startDate()
 
   def endDate(self):
     days = commonDates.numberOfDays(self.dutyModel.startDate(), self.dutyModel.endDate())
     if self.dayOffset+1 < days:
-      return commonDates.withoutTime(self.startDate()) + datetime.timedelta(days=1)
+      return commonDates.withoutTime(self.startDate()) + datetime.timedelta(days=self.dayOffset+1)
     return self.dutyModel.endDate()
 
   def startHour(self):

@@ -25,6 +25,8 @@ from config import *
 import smtplib
 from email.message import EmailMessage
 from email.headerregistry import Address
+# Coordinator
+from coordinatorCalendar import CoordinatorCalendar
 
 context=0
 
@@ -88,6 +90,8 @@ def formatCallTakerHtml():
   fstyle = open(sys.path[0] + "/calendar.css", "r")
   lstyle = fstyle.readlines()
   tomorrowSignups = context.getSignupsForDay(tomorrow)
+  #coordinatorCalendar = CoordinatorCalendar()
+  #coordinator = coordinatorCalendar.getCoordinatorForDate(tomorrow)
 
   doc = dominate.document(title='Calltaker Daily')
   with doc.head:
@@ -96,6 +100,7 @@ def formatCallTakerHtml():
     h3('TEST TEST TEST')
     p('Note this is a test of D4H scheduling for calltakers. This is not live yet.')
     h3('Calltakers for tomorrow:')
+    #h3('Calltakers for tomorrow: (Coordinator is ', coordinator, ')')
     with div().add(ul()):
       for signup in tomorrowSignups:
         startStr = str(signup.startDate().strftime('%H%M'))

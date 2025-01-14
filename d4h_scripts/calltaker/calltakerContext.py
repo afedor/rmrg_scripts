@@ -59,9 +59,9 @@ class CalltakerContext:
       list.append(signup)
     return list
     
-  def isDayComplete(self, currentDate) -> bool:
+  def dayCoverageHours(self, currentDate) -> int:
     """
-    Returns true if calltaker timeslots fill up the entire day
+    Returns total number of calltaker (half)hours
     """
     signUpHours = [0 for i in range(48)]
     calltakers = self.getCalltakerDuties()
@@ -73,6 +73,13 @@ class CalltakerContext:
         for j in range(int(signup.startHour() * 2), int(signup.endHour() * 2)):
           signUpHours[j] = True
     total = signUpHours.count(True)
+    return total
+
+  def isDayComplete(self, currentDate) -> bool:
+    """
+    Returns true if calltaker timeslots fill up the entire day
+    """
+    total = self.dayCoverageHours(currentDate)
     return (total == 48)
         
   def getSignupsForDay(self,day) -> list:

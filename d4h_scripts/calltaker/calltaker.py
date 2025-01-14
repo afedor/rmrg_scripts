@@ -93,12 +93,14 @@ def formatCallTakerHtml():
   coordinatorCalendar = CoordinatorCalendar()
   coordinator = coordinatorCalendar.getCoordinatorForDate(tomorrow)
 
-  doc = dominate.document(title='Calltaker Daily')
+  doc = dominate.document(title='Calltaker Coverage Needed')
   with doc.head:
     style(''.join(lstyle))
   with doc:
-    h3('TEST TEST TEST')
-    p('Note this is a test of D4H scheduling for calltakers. This is not live yet.')
+    if context.isDayComplete(tomorrow) == False:
+      total = context.dayCoverageHours(tomorrow)
+      p("Still need calltaker signup for tomorrow! ", (48-total)/2, " hours not covered")
+
     h3('Calltakers for tomorrow: (Coordinator is ', coordinator, ')')
     with div().add(ul()):
       for signup in tomorrowSignups:
@@ -108,9 +110,6 @@ def formatCallTakerHtml():
           endStr = '2400'
         li(' '+ signup.dutyModel.memberName()+ ': '+ startStr+ ' -> '+ endStr)
 
-    if context.isDayComplete(tomorrow) == False:
-      p("Still need signup for tomorrow!")
-      
     today = datetime.datetime.today()
     with div():
       h3("Upcoming Calltakers:")
@@ -141,7 +140,7 @@ def emailMessage(doc):
   global context
   emailList = context.calltakerEmailList()
   msg = EmailMessage()
-  msg['Subject'] = "D4H Calltaker Daily Summary"
+  msg['Subject'] = "Calltaker Coverage Needed"
   msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
   msg['To'] = Address("Calltakers", "calltakernotify", "rockymountainrescue.org")
   msg.set_content(" - plain content goes here - ")
@@ -162,7 +161,8 @@ def callMain():
   doc = formatCallTakerHtml()
   formatCallStatus(doc)
   if args.live:
-    emailMessage(doc)
+    if context.isDayComplete(tomorrow) == False:
+      emailMessage(doc)
   else:
     print(doc)
 

@@ -70,7 +70,7 @@ def formatCallStatus(doc):
         td('Available')
       with tr():
         td(cls='swork', width='40px')
-        td('Marginal (During work hours)')
+        td('Marginal (From 9am-5pm)')
       with tr():
         td(cls='smarg', width='40px')
         td('Marginal (All day)')
@@ -93,7 +93,7 @@ def formatCallTakerHtml():
   coordinatorCalendar = CoordinatorCalendar()
   coordinator = coordinatorCalendar.getCoordinatorForDate(tomorrow)
 
-  doc = dominate.document(title='Calltaker Coverage Needed')
+  doc = dominate.document(title='Calltaker Coverage')
   with doc.head:
     style(''.join(lstyle))
   with doc:
@@ -137,12 +137,31 @@ def formatCallTakerHtml():
   return doc
   
 def emailMessage(doc):
+  """
+  Email when calltakers are needed
+  """
   global context
   emailList = context.calltakerEmailList()
   msg = EmailMessage()
   msg['Subject'] = "Calltaker Coverage Needed"
   msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
   msg['To'] = Address("Calltakers", "calltakernotify", "rockymountainrescue.org")
+  msg.set_content(" - plain content goes here - ")
+  msg.add_alternative(str(doc), subtype='html')
+  # Send the message via local SMTP server.
+  with smtplib.SMTP('localhost') as s:
+    s.send_message(msg)
+
+def emailSummaryMessage(doc):
+  """
+  Email daily summary, but only to people who want it
+  """
+  global context
+  emailList = context.calltakerEmailList()
+  msg = EmailMessage()
+  msg['Subject'] = "Calltaker Coverage Summary"
+  msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
+  msg['Bcc'] = ", ".join(summary_email_list)
   msg.set_content(" - plain content goes here - ")
   msg.add_alternative(str(doc), subtype='html')
   # Send the message via local SMTP server.
@@ -160,9 +179,13 @@ def callMain():
   context.getDuties()
   doc = formatCallTakerHtml()
   formatCallStatus(doc)
+  if 'summary_email_list' not in globals():
+    print('Error: summary email list not set')
   if args.live:
     if context.isDayComplete(tomorrow) == False:
       emailMessage(doc)
+    else:
+      emailSummaryMessage(doc)
   else:
     print(doc)
 

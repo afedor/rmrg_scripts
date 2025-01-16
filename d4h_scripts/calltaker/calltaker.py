@@ -181,6 +181,7 @@ def callMain():
   formatCallStatus(doc)
   if 'summary_email_list' not in globals():
     print('Error: summary email list not set')
+  tomorrow = datetime.datetime.today() + datetime.timedelta(1)
   if args.live:
     if context.isDayComplete(tomorrow) == False:
       emailMessage(doc)

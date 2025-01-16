@@ -32,6 +32,7 @@ class CalltakerContext:
       response = apiHelper.requestGet('duties', {"after": startMonth.strftime('%Y-%m-%dT%H:%M:%SZ'), "page": page})
       results = results + response['results']
       totalSize -= 250
+      page = page + 1
     for dict in results:
       model = DutyModel(dict)
       self.duties.append(model)

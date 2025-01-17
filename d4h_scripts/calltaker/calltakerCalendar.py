@@ -22,11 +22,14 @@ class CalltakerCalendar(HTMLCalendar):
       return super().formatday(day, weekday)
 
     todayDate = datetime.datetime.today()
+    tomorrowDate = datetime.datetime.today() + datetime.timedelta(1)
     currentDate = datetime.datetime(self.monthDate.year, self.monthDate.month, day)
     isComplete = self.context.isDayComplete(currentDate)
     dayclass = ''
     if todayDate.date() == currentDate.date():
       dayclass = 'todcomp' if isComplete else 'todpart'
+    elif tomorrowDate.date() == currentDate.date():
+      dayclass = 'daycomp' if isComplete else 'tmrpart'
     else:
       dayclass = 'daycomp' if isComplete else 'daypart'
     callList = self.context.getSignupsForDay(currentDate)

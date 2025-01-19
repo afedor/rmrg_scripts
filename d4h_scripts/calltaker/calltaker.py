@@ -132,6 +132,9 @@ def formatCallTakerHtml():
       with tr():
         td(cls='todcomp', width='40px')
         td('Covered for today')
+      with tr():
+        td(cls='tmrpart', width='40px')
+        td('Not Covered for tomorrow')
     br()
 
   return doc

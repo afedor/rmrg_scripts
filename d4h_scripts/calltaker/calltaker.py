@@ -86,7 +86,8 @@ def formatCallTakerHtml():
   global context
   context.getCalltakerDuties()
   callCalendar = CalltakerCalendar(context, calendar.MONDAY)
-  tomorrow = datetime.datetime.today() + datetime.timedelta(1)
+  today = datetime.datetime.today()
+  tomorrow = today + datetime.timedelta(1)
   fstyle = open(sys.path[0] + "/calendar.css", "r")
   lstyle = fstyle.readlines()
   tomorrowSignups = context.getSignupsForDay(tomorrow)
@@ -100,6 +101,9 @@ def formatCallTakerHtml():
     if context.isDayComplete(tomorrow) == False:
       total = context.dayCoverageHours(tomorrow)
       p("Still need calltaker signup for tomorrow! ", (48-total)/2, " hours not covered")
+    if context.isDayComplete(today) == False:
+      total = context.dayCoverageHours(today)
+      p("Still need calltaker signup for today! ", (48-total)/2, " hours not covered")
 
     h3('Calltakers for tomorrow: (Coordinator is ', coordinator, ')')
     with div().add(ul()):
@@ -110,7 +114,6 @@ def formatCallTakerHtml():
           endStr = '2400'
         li(' '+ signup.dutyModel.memberName()+ ': '+ startStr+ ' -> '+ endStr)
 
-    today = datetime.datetime.today()
     with div():
       h3("Upcoming Calltakers:")
       dominate.util.raw(callCalendar.formatmonth(today.year, today.month))
@@ -184,9 +187,10 @@ def callMain():
   formatCallStatus(doc)
   if 'summary_email_list' not in globals():
     print('Error: summary email list not set')
-  tomorrow = datetime.datetime.today() + datetime.timedelta(1)
+  today = datetime.datetime.today()
+  tomorrow = today + datetime.timedelta(1)
   if args.live:
-    if context.isDayComplete(tomorrow) == False:
+    if context.isDayComplete(tomorrow) == False or context.isDayComplete(today) == False:
       emailMessage(doc)
     else:
       emailSummaryMessage(doc)

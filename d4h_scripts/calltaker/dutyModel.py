@@ -39,7 +39,9 @@ class DutyModel:
 
   def status(self):
     astatus = AvailStatus.Available if self.type().lower() == "on" else AvailStatus.Unavailable
-    if "Marginal" in self.roleTitle():
+    if "Unavailable" in self.roleTitle():
+      astatus = AvailStatus.Unavailable
+    elif "Marginal" in self.roleTitle():
       if "All" in self.roleTitle():
         astatus = AvailStatus.Marginal
       else:

@@ -44,7 +44,7 @@ class CoordinatorCalendar:
     while True:
       calendar_list = self.service.calendarList().list(pageToken=page_token).execute()
       for calendar_list_entry in calendar_list['items']:
-        if calendar_list_entry['summary'] == 'Calltaker Schedule':
+        if calendar_list_entry['summary'] == 'CallCoordinator':
           calendarId = calendar_list_entry['id']
       page_token = calendar_list.get('nextPageToken')
       if not page_token:

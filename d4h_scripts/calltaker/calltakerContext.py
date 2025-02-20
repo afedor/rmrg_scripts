@@ -97,6 +97,16 @@ class CalltakerContext:
     list.sort()
     return list
 
+  def getCalltakerForTime(self,time) -> list:
+    """
+    Get the calltakers who was signed up at the time
+    """
+    calltakers = self.getCalltakerDuties()
+    for model in calltakers:
+      if model.startDate() < time and model.endDate() > time:
+        return model
+    return None
+
   def calltakerEmailList(self) -> list:
     gid = self.memberContext.groupIdentWithName("Calltaker")
     memberList = self.memberContext.membersInGroup(gid)

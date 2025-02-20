@@ -28,6 +28,10 @@ class DutyModel:
     member = self.duty['member']
     return member['name'].split()[-1]
 
+  def memberEmail(self):
+    email = self.duty['member']['email']
+    return email['value']
+
   def type(self):
     return self.duty['type']
 

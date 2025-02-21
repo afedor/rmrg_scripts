@@ -36,7 +36,10 @@ def overdueActivities() -> list:
     coordinator = calltakerContext.getCalltakerForTime(activity.startDate())
     name = ""
     email = ""
-    if coordinator is not None:
+    if activity.type() != "Incident":
+      name = "Group Leader"
+      email = "1901@rockymountainrescue.org"
+    elif coordinator is not None:
       name = coordinator.memberName()
       email = coordinator.memberEmail()
     dict["name"] = name
@@ -56,7 +59,10 @@ def formatCallTakerHtml(dict):
     p("Date:     ", str(dict["activity"].startDate()))
     p("Activity: ", dict["activity"].synopsis())
     p("Update:   ", dict["activity"].viewURL())
-    p("Calltaker: ", dict["name"])
+    p("Lead:     ", dict["name"])
+    br()
+    if dict["activity"].type() != "Incident":
+       p("Practice leaders, mark yourself as 'Practice Lead', Meeting leaders, mark yourself as 'Lecture Lead'")
 
   return doc
   
@@ -65,7 +71,6 @@ def emailMessage(doc, name, email):
   Email when calltakers are needed
   """
   global context
-  emailList = context.calltakerEmailList()
   msg = EmailMessage()
   msg['Subject'] = "Overdue activity needs approval"
   msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
@@ -94,6 +99,7 @@ def callMain():
     if args.live:
       emailMessage(doc, dict["name"], dict["email"])
     else:
+      print("-------------- Send email to " + dict["email"] + " --------------------")
       print(doc)
 
 callMain()

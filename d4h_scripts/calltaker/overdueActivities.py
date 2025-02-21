@@ -59,10 +59,15 @@ def formatCallTakerHtml(dict):
     p("Date:     ", str(dict["activity"].startDate()))
     p("Activity: ", dict["activity"].synopsis())
     p("Update:   ", dict["activity"].viewURL())
-    p("Lead:     ", dict["name"])
-    br()
     if dict["activity"].type() != "Incident":
-       p("Practice leaders, mark yourself as 'Practice Lead', Meeting leaders, mark yourself as 'Lecture Lead'")
+      p("Lead:     ", dict["name"])
+      br()
+      p("Practice leaders, mark yourself as 'Practice Lead', Meeting leaders, mark yourself as 'Lecture Lead'")
+      p("Please forward this to the practice or meeting lead if you were not in charge")
+    else:
+      p("Calltaker:", dict["name"])
+      br()
+      p("Please forward this to the operations lead if were not in charge")
 
   return doc
   

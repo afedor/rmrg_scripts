@@ -67,7 +67,7 @@ def formatCallTakerHtml(dict):
     else:
       p("Calltaker:", dict["name"])
       br()
-      p("Please forward this to the operations lead if were not in charge")
+      p("Please forward this to the operations lead if you were not in charge")
 
   return doc
   

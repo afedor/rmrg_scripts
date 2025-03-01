@@ -23,13 +23,13 @@ class CalltakerContext:
     Get the all duties
     """
     today = datetime.datetime.today()
-    startMonth = commonDates.withoutTime(datetime.datetime(today.year, today.month, 1))
-    response = apiHelper.requestGet('duties', {"after": startMonth.strftime('%Y-%m-%dT%H:%M:%SZ')})
+    startDate = today - datetime.timedelta(days=40)
+    response = apiHelper.requestGet('duties', {"after": startDate.strftime('%Y-%m-%dT%H:%M:%SZ')})
     results = response['results']
     totalSize = int(response['totalSize'])
     page = 1
     while totalSize >= 250:
-      response = apiHelper.requestGet('duties', {"after": startMonth.strftime('%Y-%m-%dT%H:%M:%SZ'), "page": page})
+      response = apiHelper.requestGet('duties', {"after": startDate.strftime('%Y-%m-%dT%H:%M:%SZ'), "page": page})
       results = results + response['results']
       totalSize -= 250
       page = page + 1

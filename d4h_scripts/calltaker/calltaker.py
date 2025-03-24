@@ -140,6 +140,7 @@ def formatCallTakerHtml():
         td('Not Covered for tomorrow')
     br()
 
+  coordinatorCalendar.saveCoordinatorToWhiteboard()
   return doc
   
 def emailMessage(doc):

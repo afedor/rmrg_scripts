@@ -1,6 +1,8 @@
 import datetime
 import sys
 import os.path
+import apiHelper
+import json
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -86,4 +88,44 @@ class CoordinatorCalendar:
       if thedate >= startDate and thedate <= endDate:
         coordinator = event["summary"]
     return coordinator
+
+  def coordinatorNotes(self):
+    # Write info about the current calltaker to a string so it can be saved in a note
+    noteList = []
+    count = 0
+    for event in self.events:
+      if count > 1:
+        break
+      startStr = event["start"].get("dateTime", event["start"].get("date"))
+      name = event["summary"]
+      noteList.append(name + "|" + startStr);
+      count = count + 1
+    return "CTC:" + ','.join(noteList)
+
+  def saveCoordinatorToWhiteboard(self):
+    """
+    Save the coordinator information to a note on d4h, so RMRAccess can pick it up
+    """
+    notepath = sys.path[0] + "/_coordinator_note.txt"
+    noteid = 0
+    if os.path.isfile(notepath):
+      with open(notepath, "r") as note:
+        lines = note.readlines()
+        noteid = int(lines[0])
+      try:
+        response = apiHelper.requestGet('whiteboard/' + str(noteid), {})
+      except:
+        # Note not there, just recreate it
+        noteid = 0
+    note = self.coordinatorNotes();
+    archiveStr = datetime.datetime.utcnow().isoformat() + "Z"  # 'Z' indicates UTC time
+    body = {"text": note, "archivedAt": archiveStr}
+    if noteid > 0:
+      response = apiHelper.requestPatch('whiteboard/' + str(noteid), body)
+    else:
+      response = apiHelper.requestPost('whiteboard', body)
+    if "id" in response:
+      print("  Uploaded coordinator note " + str(response["id"]))
+      with open(notepath, "w") as note:
+        note.write(str(response["id"]))
 

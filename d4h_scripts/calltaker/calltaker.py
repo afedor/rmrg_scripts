@@ -84,7 +84,7 @@ def formatCallTakerHtml():
   Format calltaker info into html
   """
   global context
-  context.getCalltakerDuties()
+  context.dutyContext.getCalltakerDuties()
   callCalendar = CalltakerCalendar(context, calendar.MONDAY)
   today = datetime.datetime.today()
   tomorrow = today + datetime.timedelta(1)
@@ -183,7 +183,6 @@ def callMain():
 
   apiHelper.requestContext()
   context = CalltakerContext() 
-  context.getDuties()
   doc = formatCallTakerHtml()
   formatCallStatus(doc)
   if 'summary_email_list' not in globals():

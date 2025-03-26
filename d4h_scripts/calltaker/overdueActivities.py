@@ -20,23 +20,31 @@ import smtplib
 from email.message import EmailMessage
 from email.headerregistry import Address
 from calltakerContext import CalltakerContext
+from attendanceContext import AttendanceContext
+from memberContext import MemberContext
 
 context=0
 
 def overdueActivities() -> list:
-  context = ActivityContext()
-  context.initContext()
-  calltakerContext = CalltakerContext()
-  calltakerContext.getDuties()
 
   list = context.draftActivities()
   overdue = []
   for activity in list:
     dict = {}
+    print("Checking activity " + activity.synopsis())
     coordinator = calltakerContext.getCalltakerForTime(activity.startDate())
+    attendanceContext = AttendanceContext(activity.identity())
+    leads = attendanceContext.allLeadRoleAttendance()
+    print("  attendance is " + str(attendanceContext.attendanceCount()))
     name = ""
     email = ""
-    if activity.type() != "Incident":
+    if len(leads):
+      firstLead = leads[0]
+      member = calltakerContext.memberContext.memberWithIdent(firstLead.memberId())
+      name = member["name"]
+      email = member["email"]["value"]
+      print("  using lead " + name + "   role " + firstLead.roleName())
+    elif activity.type() != "Incident":
       name = "Group Leader"
       email = "1901@rockymountainrescue.org"
     elif coordinator is not None:
@@ -89,16 +97,7 @@ def emailMessage(doc, name, email):
   with smtplib.SMTP('localhost') as s:
     s.send_message(msg)
 
-def callMain():
-  global context
-  parser = argparse.ArgumentParser(description='Overdue Activities', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-  parser.add_argument("-l", "--live", dest='live', action='store_true', help='Run live and send email')
-  args = parser.parse_args()
-  if 'summary_email_list' not in globals():
-    print('Error: summary email list not set')
-
-  apiHelper.requestContext()
-  list = overdueActivities()
+def sendEmails(list):
   for dict in list:
     doc = formatCallTakerHtml(dict)
     if args.live:
@@ -107,4 +106,16 @@ def callMain():
       print("-------------- Send email to " + dict["email"] + " --------------------")
       print(doc)
 
-callMain()
+parser = argparse.ArgumentParser(description='Overdue Activities', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+parser.add_argument("-l", "--live", dest='live', action='store_true', help='Run live and send email')
+args = parser.parse_args()
+if 'summary_email_list' not in globals():
+  print('Error: summary email list not set')
+
+apiHelper.requestContext()
+context = ActivityContext()
+context.initContext()
+calltakerContext = CalltakerContext()
+
+list = overdueActivities()
+sendEmails(list)

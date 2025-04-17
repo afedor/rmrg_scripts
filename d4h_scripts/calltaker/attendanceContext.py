@@ -32,7 +32,7 @@ class AttendanceContext:
       if model.status() != "ATTENDING":
         continue
       roleName = self.roleContext.roleNameForId(model.roleId())
-      if "Lead" in roleName:
+      if "Lead" in roleName or "Calltaker" in roleName:
         model.setRoleName(roleName)
         leads.append(model)
     return leads

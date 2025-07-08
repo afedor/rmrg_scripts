@@ -87,10 +87,10 @@ def emailMessage(doc, name, email):
   msg = EmailMessage()
   msg['Subject'] = "Overdue activity needs approval"
   msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
-  #if name:
-  #  msg['To'] = name + "<" + email + ">"
-  #msg['Bcc'] = ", ".join(summary_email_list)
-  msg['Bcc'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
+  if name:
+    msg['To'] = name + "<" + email + ">"
+  msg['Bcc'] = ", ".join(summary_email_list)
+  #msg['Bcc'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
   msg.set_content(" - plain content goes here - ")
   msg.add_alternative(str(doc), subtype='html')
   # Send the message via local SMTP server.

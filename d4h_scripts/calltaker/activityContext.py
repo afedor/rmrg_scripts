@@ -20,7 +20,7 @@ class ActivityContext:
 
   def requestActivitiesOfType(self, type):
     todaydate = datetime.datetime.now(datetime.timezone.utc)
-    startDate = todaydate - datetime.timedelta(days=60)
+    startDate = todaydate - datetime.timedelta(days=120)
     response = apiHelper.requestGet(type, {'after': startDate.strftime('%Y-%m-%dT%H:%M:%SZ')})
     for dict in response['results']:
       activity = ActivityModel(dict)

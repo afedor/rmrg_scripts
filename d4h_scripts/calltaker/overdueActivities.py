@@ -10,18 +10,14 @@ import datetime
 import dominate
 from dominate.tags import *
 # Custom
-import apiHelper
-import commonDates
-from activityModel import ActivityModel
-from activityContext import ActivityContext
-from config import *
+sys.path.insert(1, '..')
+import d4hcommon
+from d4hcommon import apiHelper
 # Email
 import smtplib
 from email.message import EmailMessage
 from email.headerregistry import Address
 from calltakerContext import CalltakerContext
-from attendanceContext import AttendanceContext
-from memberContext import MemberContext
 
 context=0
 
@@ -33,7 +29,7 @@ def overdueActivities() -> list:
     dict = {}
     print("Checking activity " + activity.synopsis())
     coordinator = calltakerContext.getCalltakerForTime(activity.startDate())
-    attendanceContext = AttendanceContext(activity.identity())
+    attendanceContext = d4hcommon.AttendanceContext(activity.identity())
     leads = attendanceContext.allLeadRoleAttendance()
     print("  attendance is " + str(attendanceContext.attendanceCount()))
     name = ""
@@ -113,7 +109,7 @@ if 'summary_email_list' not in globals():
   print('Error: summary email list not set')
 
 apiHelper.requestContext()
-context = ActivityContext()
+context = d4hcommon.ActivityContext()
 context.initContext()
 calltakerContext = CalltakerContext()
 

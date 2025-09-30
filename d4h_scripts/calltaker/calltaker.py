@@ -13,14 +13,12 @@ import calendar
 import dominate
 from dominate.tags import *
 # Custom
-import apiHelper
-import commonDates
-from ordinalCallSignup import OrdinalCallSignup
-from dutyModel import DutyModel
-from dutyModel import AvailStatus
+sys.path.insert(1, '..')
+import d4hcommon
+from d4hcommon import commonDates
+from d4hcommon import apiHelper
 from calltakerContext import CalltakerContext
 from calltakerCalendar import CalltakerCalendar
-from config import *
 # Email
 import smtplib
 from email.message import EmailMessage
@@ -38,7 +36,7 @@ def formatCallStatus(doc):
   colspan = commonDates.differenceInDays(todaydate, nextmonth)
   if colspan > maxdays:
     colspan = maxdays
-  availClass = {AvailStatus.NoStatus: 'snone', AvailStatus.Available: 'savail', AvailStatus.Work: 'swork', AvailStatus.Marginal: 'smarg', AvailStatus.Unavailable: 'sunav'}
+  availClass = {d4hcommon.AvailStatus.NoStatus: 'snone', d4hcommon.AvailStatus.Available: 'savail', d4hcommon.AvailStatus.Work: 'swork', d4hcommon.AvailStatus.Marginal: 'smarg', d4hcommon.AvailStatus.Unavailable: 'sunav'}
   with doc:
     h3('Calltakers Availability:')
     with table(border=1).add(tbody()):

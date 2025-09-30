@@ -3,7 +3,7 @@
 # RoleContext
 # Track roles
 #
-import apiHelper
+from . import apiHelper
 
 class RoleContext:
 

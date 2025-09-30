@@ -6,7 +6,7 @@
 import json
 import requests
 
-from config import *
+from .config import *
 
 # Global properties
 context="team"

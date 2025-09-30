@@ -3,21 +3,18 @@
 # CalltakerContext
 # Track calltaker data
 #
+import sys
 import datetime
-import apiHelper
-import commonDates
-from ordinalCallSignup import OrdinalCallSignup
-from dutyModel import DutyModel
-from dutyModel import AvailStatus
-from memberContext import MemberContext
-from dutyContext import DutyContext
+sys.path.insert(1, '..')
+import d4hcommon
+from d4hcommon import commonDates
 
 class CalltakerContext:
 
   def __init__(self):
-    self.memberContext = MemberContext()
+    self.memberContext = d4hcommon.MemberContext()
     self.memberContext.initContext()
-    self.dutyContext = DutyContext()
+    self.dutyContext = d4hcommon.DutyContext()
  
   def dayCoverageHours(self, currentDate) -> int:
     """
@@ -80,7 +77,7 @@ class CalltakerContext:
     names = self.calltakerNameList()
     map = {}
     for name in names:
-      map[name] = [AvailStatus.NoStatus for i in range(30)]
+      map[name] = [d4hcommon.AvailStatus.NoStatus for i in range(30)]
     todaydate = datetime.datetime.today()
     for model in self.dutyContext.duties:
       signups = self.dutyContext.callSignupsFromDutyModel(model)

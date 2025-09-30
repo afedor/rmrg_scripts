@@ -4,8 +4,8 @@
 # Gets information about members and groups
 #
 import datetime
-import apiHelper
-import commonDates
+from . import apiHelper
+from . import commonDates
 
 class MemberContext:
 

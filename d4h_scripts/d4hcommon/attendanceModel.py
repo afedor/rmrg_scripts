@@ -1,5 +1,5 @@
 import datetime
-import commonDates
+from . import commonDates
 
 class AttendanceModel:
 

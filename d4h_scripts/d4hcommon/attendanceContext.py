@@ -4,10 +4,10 @@
 # Gets information event attendance
 #
 import datetime
-import apiHelper
-import commonDates
-from attendanceModel import AttendanceModel
-from roleContext import RoleContext
+from . import apiHelper
+from . import commonDates
+from .attendanceModel import AttendanceModel
+from .roleContext import RoleContext
 
 class AttendanceContext:
 

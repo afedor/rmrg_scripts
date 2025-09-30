@@ -1,8 +1,9 @@
 import datetime
 import sys
 import os.path
-import apiHelper
 import json
+import d4hcommon
+from d4hcommon import apiHelper
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials

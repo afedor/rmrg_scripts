@@ -4,12 +4,12 @@
 # Track duties
 #
 import datetime
-import apiHelper
-import commonDates
-from ordinalCallSignup import OrdinalCallSignup
-from dutyModel import DutyModel
-from dutyModel import AvailStatus
-from memberContext import MemberContext
+from . import apiHelper
+from . import commonDates
+from .ordinalCallSignup import OrdinalCallSignup
+from .dutyModel import DutyModel
+from .dutyModel import AvailStatus
+from .memberContext import MemberContext
 
 class DutyContext:
 

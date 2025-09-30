@@ -1,6 +1,9 @@
 
+__pycache__
 config_private.py
 config_private.php
 credentials_private.json
 token.json
 _coordinator_note.txt
+
+a911

@@ -4,9 +4,9 @@
 # Gets information about events, incidents, and exercises
 #
 import datetime
-import apiHelper
-import commonDates
-from activityModel import ActivityModel
+from . import apiHelper
+from . import commonDates
+from .activityModel import ActivityModel
 
 class ActivityContext:
 

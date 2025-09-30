@@ -1,6 +1,7 @@
+import sys
 import datetime
-import commonDates
-from dutyModel import DutyModel
+from . import commonDates
+from .dutyModel import DutyModel
 
 class OrdinalCallSignup:
 

@@ -113,13 +113,13 @@ def callMain():
   apiHelper.requestContext()
   context = EquipmentContext() 
   latestCheckouts = latestCheckoutList(context)
-  doc = formatCheckoutHtml(latestCheckouts, context.memberContext)
-
   saveLastCheckDate()
 
-  if args.live:
-    emailMessage(doc)
-  else:
-    print(doc)
+  if latestCheckouts:
+    doc = formatCheckoutHtml(latestCheckouts, context.memberContext)
+    if args.live:
+      emailMessage(doc)
+    else:
+      print(doc)
 
 callMain()

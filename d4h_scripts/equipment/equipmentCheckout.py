@@ -45,7 +45,7 @@ def lastCheckDate() -> datetime:
         return date
   # If no date, go back just a few days so we don't accidentally send all previous checkouts
   today = datetime.datetime.today()
-  past = today + datetime.timedelta(-4)
+  past = today + datetime.timedelta(-2)
   past = past.replace(tzinfo=zone)
   return past
 
@@ -108,6 +108,11 @@ def callMain():
   parser = argparse.ArgumentParser(description='Equipment Checkout', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
   parser.add_argument("-l", "--live", dest='live', action='store_true', help='Run live and send email')
   args = parser.parse_args()
+
+  # Don't run overnight when nothing is probably happening
+  today = datetime.datetime.today()
+  if today.hour >=23 or today.hour < 7:
+    return
 
   print("Running Equipment Checkout Check")
   apiHelper.requestContext()

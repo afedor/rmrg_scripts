@@ -11,6 +11,9 @@ import dominate
 from dominate.tags import *
 # Custom
 sys.path.insert(1, '..')
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 import d4hcommon
 from d4hcommon import apiHelper
 # Email

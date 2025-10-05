@@ -25,6 +25,9 @@ def numberOfDays(startDate, endDate) -> int:
 def withoutTime(theDate):
   return theDate.replace(hour=0, minute=0, second=0, microsecond=0)
 
+def isSameDay(date1, date2):
+  return withoutTime(date1) == withoutTime(date2)
+
 def firstDayOfNextMonth(theDate):
   """
   Returns the first day of the month following the given date

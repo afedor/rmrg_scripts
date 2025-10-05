@@ -41,8 +41,8 @@ def overdueActivities() -> list:
       email = member["email"]["value"]
       print("  using lead " + name + "   role " + firstLead.roleName())
     elif activity.type() != "Incident":
-      name = "Group Leader"
-      email = "1901@rockymountainrescue.org"
+      name = "Assistant Group Leader"
+      email = "1902@rockymountainrescue.org"
     elif coordinator is not None:
       name = coordinator.memberName()
       email = coordinator.memberEmail()

@@ -19,8 +19,7 @@ class MemberContext:
     self.groups = response['results']
 
   def requestMembers(self):
-    response = apiHelper.requestGet('members', {})
-    self.members = response['results']
+    self.members = apiHelper.requestGetAll('members', {})
 
   def requestMemberGroups(self, groupid):
     response = apiHelper.requestGet('member-group-memberships', {"group_id": groupid})
@@ -29,8 +28,6 @@ class MemberContext:
   def initContext(self):
     self.requestGroups()
     self.requestMembers()
-    callGroup = self.groupIdentWithName("Calltaker")
-    self.requestMemberGroups(callGroup)
 
   def groupIdentWithName(self, groupName) -> int:
     for group in self.groups:

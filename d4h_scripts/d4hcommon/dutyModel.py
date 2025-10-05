@@ -20,6 +20,10 @@ class DutyModel:
   def endDate(self):
     return commonDates.strToDatetime(self.duty['endsAt'])
 
+  def memberId(self):
+    member = self.duty['member']
+    return member['id']
+
   def memberName(self):
     member = self.duty['member']
     return member['name']
@@ -41,6 +45,9 @@ class DutyModel:
       return role['title']
     return ''
 
+  def notes(self):
+    return self.duty["notes"]
+
   def status(self):
     astatus = AvailStatus.Available if self.type().lower() == "on" else AvailStatus.Unavailable
     if "Unavailable" in self.roleTitle():
@@ -51,3 +58,19 @@ class DutyModel:
       else:
         astatus = AvailStatus.Work
     return astatus
+
+  def memberIdFromEquipmentNote(self):
+    list = self.notes().split(',')
+    if not list:
+      return 0
+    memberId = list[0]
+    if memberId:
+      return int(memberId)
+    return 0
+
+  def commentFromEquipmentNote(self):
+    list = self.notes().split(',')
+    if len(list) < 2:
+      return ""
+    return list[1];
+

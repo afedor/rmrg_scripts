@@ -14,6 +14,8 @@ class CalltakerContext:
   def __init__(self):
     self.memberContext = d4hcommon.MemberContext()
     self.memberContext.initContext()
+    callGroup = self.memberContext.groupIdentWithName("Calltaker")
+    self.memberContext.requestMemberGroups(callGroup)
     self.dutyContext = d4hcommon.DutyContext()
  
   def dayCoverageHours(self, currentDate) -> int:

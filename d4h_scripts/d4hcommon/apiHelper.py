@@ -26,6 +26,19 @@ def requestGet(path, params, use_context=True) -> dict:
     raise ValueError('D4H api fail')
   return r.json()
 
+def requestGetAll(path, params, use_context=True) -> list:
+    response = requestGet(path, params, use_context)
+    results = response['results']
+    totalSize = int(response['totalSize'])
+    page = 1
+    while totalSize >= 250:
+      params["page"] = page
+      response = requestGet(path, params, use_context)
+      results.extend(response['results'])
+      totalSize -= 250
+      page = page + 1
+    return results
+
 def requestPost(path, body) -> dict:
   """
   Make a post request

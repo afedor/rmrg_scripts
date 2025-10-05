@@ -20,15 +20,7 @@ class DutyContext:
     self.duties = []
     today = datetime.datetime.today()
     startDate = today - datetime.timedelta(days=40)
-    response = apiHelper.requestGet('duties', {"after": startDate.strftime('%Y-%m-%dT%H:%M:%SZ')})
-    results = response['results']
-    totalSize = int(response['totalSize'])
-    page = 1
-    while totalSize >= 250:
-      response = apiHelper.requestGet('duties', {"after": startDate.strftime('%Y-%m-%dT%H:%M:%SZ'), "page": page})
-      results = results + response['results']
-      totalSize -= 250
-      page = page + 1
+    results = apiHelper.requestGetAll('duties', {"after": startDate.strftime('%Y-%m-%dT%H:%M:%SZ')})
     for dict in results:
       model = DutyModel(dict)
       self.duties.append(model)
@@ -54,3 +46,11 @@ class DutyContext:
       signup = OrdinalCallSignup(duty, i)
       list.append(signup)
     return list
+
+  def dutiesForMember(self, memberId) -> list:
+    responses = []
+    for duty in self.duties:
+      if duty.memberId() == memberId:
+        responses.append(duty);
+    return responses
+

@@ -3,6 +3,7 @@
 # OverdueActivitiesReminder
 # Downloads past activities and flags ones that are still in draft form
 #
+import os
 import sys
 import argparse
 import datetime

@@ -4,6 +4,7 @@
 # Downloads current calltaker calendar from D4H and mails out a summary to the calltakers
 # See: https://github.com/Knio/dominate
 #
+import os
 import sys
 import argparse
 import datetime

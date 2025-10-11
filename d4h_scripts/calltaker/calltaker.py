@@ -10,6 +10,7 @@ import argparse
 import datetime
 import requests
 import calendar
+from config_private import *
 # HTML
 import dominate
 from dominate.tags import *

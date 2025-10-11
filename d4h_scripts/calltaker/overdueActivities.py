@@ -7,6 +7,7 @@ import os
 import sys
 import argparse
 import datetime
+from config_private import *
 # HTML
 import dominate
 from dominate.tags import *

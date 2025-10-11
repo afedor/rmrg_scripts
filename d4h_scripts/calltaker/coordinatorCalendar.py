@@ -83,8 +83,12 @@ class CoordinatorCalendar:
     coordinator=""
     for event in self.events:
       startStr = event["start"].get("dateTime", event["start"].get("date"))
+      splitDate = startStr.split('T')
+      startStr = splitDate[0]
       startDate = datetime.datetime.strptime(startStr, '%Y-%m-%d')
       endStr = event["end"].get("dateTime", event["end"].get("date"))
+      splitDate = endStr.split('T')
+      endStr = splitDate[0]
       endDate = datetime.datetime.strptime(endStr, '%Y-%m-%d')
       if thedate >= startDate and thedate <= endDate:
         coordinator = event["summary"]

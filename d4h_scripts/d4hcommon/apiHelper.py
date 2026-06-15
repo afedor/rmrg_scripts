@@ -11,6 +11,12 @@ from .config import *
 # Global properties
 context="team"
 
+def printFailResponse(response):
+  try:
+    print("D4H Fail: ", response.status_code, ': ', response.json())
+  except:
+    print("D4H Fail: ", response.status_code, ': ', response.text)
+
 def requestGet(path, params, use_context=True) -> dict:
   """
   Make a get request
@@ -22,7 +28,7 @@ def requestGet(path, params, use_context=True) -> dict:
   headers = {'Authorization': 'Bearer '+d4h_token}
   r = requests.get(url, headers=headers, params=params)
   if r.status_code >= 300:
-    print("D4H Fail: ", r.status_code, ': ', r.json())
+    printFailResponse(r)
     raise ValueError('D4H api fail')
   return r.json()
 
@@ -47,7 +53,7 @@ def requestPost(path, body) -> dict:
   headers = {'Authorization': 'Bearer '+d4h_token}
   r = requests.post(url, headers=headers, json=body)
   if r.status_code >= 300:
-    print("D4H Post Fail: ", r.status_code, ': ', r.json())
+    printFailResponse(r)
     raise ValueError('D4H api post fail')
   return r.json()
 
@@ -59,8 +65,20 @@ def requestPatch(path, body) -> dict:
   headers = {'Authorization': 'Bearer '+d4h_token}
   r = requests.patch(url, json=body, headers=headers)
   if r.status_code >= 300:
-    print("D4H Patch Fail: ", r.status_code, ': ', r.json())
+    printFailResponse(r)
     raise ValueError('D4H api patch fail')
+  return r.json()
+
+def requestDelete(path) -> dict:
+  """
+  Make a delete request
+  """
+  url = d4h_url + '/' + d4h_api + '/' + context + '/' + path
+  headers = {'Authorization': 'Bearer '+d4h_token}
+  r = requests.delete(url, headers=headers)
+  if r.status_code >= 300:
+    printFailResponse(r)
+    raise ValueError('D4H api delete fail')
   return r.json()
 
 def requestContext():

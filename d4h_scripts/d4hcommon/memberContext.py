@@ -6,12 +6,14 @@
 import datetime
 from . import apiHelper
 from . import commonDates
+from .memberModel import MemberModel
 
 class MemberContext:
 
   def __init__(self):
     self.groups = []
     self.members = []
+    self.memberModels = []
     self.memberGroups = []
 
   def requestGroups(self):
@@ -20,6 +22,9 @@ class MemberContext:
 
   def requestMembers(self):
     self.members = apiHelper.requestGetAll('members', {})
+    for member in self.members:
+      model = MemberModel(member)
+      self.memberModels.append(model)
 
   def requestMemberGroups(self, groupid):
     response = apiHelper.requestGet('member-group-memberships', {"group_id": groupid})
@@ -55,6 +60,17 @@ class MemberContext:
       if self.memberInGroup(member, groupIdent):
         list.append(member)
     return list
+  
+  def memberContainsLastShortName(self, lastShortName) -> MemberModel:
+    for member in self.memberModels:
+      if member.memberLastShort() in lastShortName:
+        return member
+      # Special hack for O'Malley:
+      if "'" in member.memberLastShort():
+        name = member.memberLastShort().replace("'", "")
+        if name in lastShortName:
+          return member
+    return None
 
   def memberGroupEmails(self, groupList) -> list:
     """

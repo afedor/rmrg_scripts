@@ -7,6 +7,14 @@ class AttendanceModel:
     self.model = model
     self.attRoleName = ""
 
+  def __eq__(self, other):
+    if isinstance(other, self.__class__):
+      return self.identifier() == other.identifier()
+    return False
+
+  def identifier(self):
+    return self.model['id']
+  
   def date(self):
     return commonDates.strToDatetime(self.model['startsAt'])
     

@@ -26,6 +26,15 @@ class ActivityContext:
       activity = ActivityModel(dict)
       self.activities.append(activity)
 
+  def requestActivity(self, type, identifier):
+    try:
+      response = apiHelper.requestGet(f"{type}/{identifier}", {})
+      activity = ActivityModel(response)
+      return activity
+    except Exception as e:
+      print(f'  Fail to find activity: {e}')
+    return None
+
   def initContext(self):
     self.requestActivities()
 
@@ -36,3 +45,10 @@ class ActivityContext:
       if activity.published() == False and activity.startDate() < allowDate:
         list.append(activity)
     return list
+  
+  def activityFromId(self, identifier):
+    for activity in self.activities:
+      if activity.identity() == identifier:
+        return activity
+    return None
+

@@ -12,7 +12,9 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+READ_SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+RW_SCOPES =  ["https://www.googleapis.com/auth/calendar.readonly",
+          "https://www.googleapis.com/auth/calendar.events.owned"]
 
 class CoordinatorCalendar:
 
@@ -20,24 +22,24 @@ class CoordinatorCalendar:
     self.calendarId = 0
     self.events = []
 
-  def authenticate(self):
+  def authenticate(self, tokenfile: str, scopes: list):
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
     if os.path.exists(sys.path[0] + "/token.json"):
-      creds = Credentials.from_authorized_user_file(sys.path[0] + "/token.json", SCOPES)
+      creds = Credentials.from_authorized_user_file(sys.path[0] + "/" + tokenfile, scopes)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
       if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
       else:
         flow = InstalledAppFlow.from_client_secrets_file(
-            "credentials_private.json", SCOPES
+            "credentials_private.json", scopes
         )
         creds = flow.run_local_server(port=0)
       # Save the credentials for the next run
-      with open(sys.path[0] + "/token.json", "w") as token:
+      with open(sys.path[0] + "/" + tokenfile, "w") as token:
         token.write(creds.to_json())
     self.service = build("calendar", "v3", credentials=creds)
 
@@ -74,10 +76,20 @@ class CoordinatorCalendar:
       return []
     self.events = events
 
-  def getCoordinatorForDate(self, thedate):
+  def setupCalendar(self, readwrite: bool):
     if self.calendarId == 0:
-      self.authenticate()
+      scopes = READ_SCOPES
+      tokenfile = "token.json"
+      if readwrite:
+        scopes = RW_SCOPES
+        tokenfile = "token-rw.json"
+      self.authenticate(tokenfile=tokenfile, scopes=scopes)
       self.calendarId = self.getCalendarId()
+      print(f"-- working with calendar {self.calendarId}")
+
+  def getCoordinatorForDate(self, thedate):
+    self.setupCalendar(readwrite=False)
+    if self.calendarId != 0:
       self.grabEvents(self.calendarId)
 
     coordinator=""
@@ -133,4 +145,14 @@ class CoordinatorCalendar:
       print("  Uploaded coordinator note " + str(response["id"]))
       with open(notepath, "w") as note:
         note.write(str(response["id"]))
+
+  def insertEvent(self, name, startDate):
+    # Call the Calendar API to insert
+    endDate = startDate + datetime.timedelta(days=7)
+
+    event = {"summary": name, 
+             "start": {"date": startDate.strftime('%Y-%m-%d')},
+             "end": {"date": endDate.strftime('%Y-%m-%d')},
+             }
+    self.service.events().insert(calendarId=self.calendarId, body=event).execute()
 

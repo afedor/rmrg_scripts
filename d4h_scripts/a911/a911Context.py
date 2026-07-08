@@ -53,15 +53,15 @@ class A911Context:
     return device
 
   def allRespondingDevices(self, page):
-    devices = []
-    list = page.devices()
-    for dict in list:
+    devices = {}
+    deviceList = page.devices()
+    for dict in deviceList:
       print(f"  -- looking for device {dict["identifier"]}")
       device = self.requestDevice(dict["identifier"])
       if device:
         device.setResponse(dict["response"])
-        devices.append(device)
-    return devices
+        devices[dict["identifier"]] = device
+    return list(devices.values())
   
   def pageWithCadCode(self, code):
     for dict in self.pages:

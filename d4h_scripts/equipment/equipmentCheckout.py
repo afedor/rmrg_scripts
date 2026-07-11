@@ -5,6 +5,7 @@
 #
 import sys
 import os
+import re
 import argparse
 import datetime
 import requests
@@ -98,7 +99,8 @@ def emailMessage(doc):
   msg['Subject'] = "Fleet Checkout Update"
   msg['From'] = Address("Adam Fedor", "adam.fedor", "rockymountainrescue.org")
   msg['To'] = Address("Truck Drivers", "fleet", "rockymountainrescue.org")
-  msg.set_content(" - plain content goes here - ")
+  plain = re.sub(r'<[^>]+>', '', str(doc))
+  msg.set_content(plain)
   msg.add_alternative(str(doc), subtype='html')
   # Send the message via local SMTP server.
   with smtplib.SMTP('localhost') as s:

@@ -42,6 +42,11 @@ truck or other vehicle has been checked out recently.
 
 This script grabs the attendance from the A911 page and inserts it into the matching d4H incident
 
+### Fill calltaker calendar
+
+The `fillCalendar.py` script fills in the calltaker calendar given a list of names, e.g.
+- python fillCalendar.py -l list.txt -d '2026-10-05'
+
 Example crontab:
 # Calltaker coverage
 4 7 * * * /usr/bin/python3.8 /home/fedor/rmrg_scripts/d4h_scripts/calltaker/calltaker.py --live

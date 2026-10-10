@@ -8,6 +8,15 @@ class DeviceModel:
   def memberName(self):
     return self.device['name']
 
+  def memberAgencyName(self):
+    if 'memberships' in self.device:
+      members = self.device['memberships']
+      if len(members):
+        member = members[0]
+        if 'agency_device_name' in member:
+          return member['agency_device_name']
+    return self.memberName()
+
   def response(self):
     return self.respstr
 

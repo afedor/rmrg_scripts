@@ -46,8 +46,8 @@ def runAddAttendance(pageId: int) -> str:
     allAttending = attendanceContext.attendanceList()
     print("Responding:")
     for response in responses:
-        print(f"  {response.memberName()}  resp: {response.response()}")
-        member = memberContext.memberContainsLastShortName(response.memberName())
+        print(f"  {response.memberAgencyName()}  resp: {response.response()}")
+        member = memberContext.memberContainsLastShortName(response.memberAgencyName())
         if "Cancel" in response.response():
             print("    Skipping - cancelled")
             continue
